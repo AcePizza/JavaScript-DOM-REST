@@ -18,7 +18,7 @@ let marvelData = {
         description: "",
         modified: "2014-04-29T14:18:17-0400",
         thumbnail: {
-          path: "http://i.annihil.us/u/prod/marvel/i/mg/c/e0/535fecbbb9784",
+          path: "http://i.annihil.us/u/prod/marvel/i/mg/c5/e0/535fecbbb9784",
           extension: "jpg",
         },
         resourceURI: "http://gateway.marvel.com/v1/public/characters/1011334",
