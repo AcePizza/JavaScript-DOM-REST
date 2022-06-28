@@ -1,20 +1,20 @@
 let url =
 "https://gateway.marvel.com/v1/public/characters?ts=1&apikey=dd7f4f144fe3786105bea06c9a02d3ee&hash=8fda5d5a302ba2bbf1db8ceb456f928f";
 
-async function getMarvelData(url) {
-  const response = await fetch(url);
+async function getMarvelData(str) {
+  const response = await fetch(str);
 
   let data = await response.json();
-  console.log(data);
+  // console.log(data.data.results);
   return data;
 }
 
-getMarvelData(url);
-
-let divMainStuff = document.getElementById("main-Stuff");
+// console.log("here is the data>>>", testData);
+// console.log("------------");
+// console.log("This is the second>>>", testData.data.results[2])
 
 for (let i = 0; i < marvelData.data.results.length; i++) {
-  // console.log(marvelData.data.results[i]);
+  let divMainStuff = document.getElementById("main-Stuff");
 
   let divCard = document.createElement("div");
   divCard.setAttribute("class", "col-sm-12 col-md-6 col-lg-4 card");
@@ -37,25 +37,46 @@ for (let i = 0; i < marvelData.data.results.length; i++) {
   h5.classList.add("card-title");
   h5.innerHTML = marvelData.data.results[i].name;
 
-  let p = document.createElement("p");
-  p.classList.add("card-text");
+  let collapsDiv = document.createElement("div");
+  collapsDiv.setAttribute("class", "collapse");
+  collapsDiv.setAttribute("id", i)
+
+  // let p = document.createElement("p");
+  // p.classList.add("card-text");
+  // if (marvelData.data.results[i].description == "") {
+  //   p.classList.add("font-italic");
+  //   p.classList.add("text-muted");
+  //   p.innerHTML = "No description available";
+  // } else {
+  //   p.innerHTML = marvelData.data.results[i].description;
+  // }
+
+  let divText = document.createElement("div");
+  divText.classList.add("card-text");
   if (marvelData.data.results[i].description == "") {
-    p.classList.add("font-italic");
-    p.classList.add("text-muted");
-    p.innerHTML = "No description available";
+    divText.classList.add("font-italic");
+    divText.classList.add("text-muted");
+    divText.innerHTML = "No description available";
   } else {
-    p.innerHTML = marvelData.data.results[i].description;
+    divText.innerHTML = marvelData.data.results[i].description;
   }
 
-  let a = document.createElement("a");
-  a.setAttribute("href", "#");
-  a.setAttribute("class", "btn btn-primary");
-  a.innerHTML = "TEST";
+  let btnCollExp = document.createElement("button");
+  btnCollExp.setAttribute("class", "btn btn-primary");
+  btnCollExp.setAttribute("type", "button");
+  btnCollExp.setAttribute("data-toggle", "collapse"); 
+  btnCollExp.setAttribute("data-target", `#${i}`);
+  btnCollExp.setAttribute("aria-expanded", "false");
+  btnCollExp.setAttribute("aria-controls", i);
+  btnCollExp.innerHTML = "Read More";
+
+
 
   divCard.appendChild(img);
   divCard.appendChild(cardBody);
   cardBody.appendChild(h5);
-  cardBody.appendChild(p);
-  cardBody.appendChild(a);
+  cardBody.appendChild(collapsDiv);
+  collapsDiv.appendChild(divText);
+  cardBody.appendChild(btnCollExp);
   divMainStuff.appendChild(divCard);
 }
