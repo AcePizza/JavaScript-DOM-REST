@@ -41,26 +41,6 @@ for (let i = 0; i < marvelData.data.results.length; i++) {
   collapsDiv.setAttribute("class", "collapse");
   collapsDiv.setAttribute("id", i)
 
-  // let p = document.createElement("p");
-  // p.classList.add("card-text");
-  // if (marvelData.data.results[i].description == "") {
-  //   p.classList.add("font-italic");
-  //   p.classList.add("text-muted");
-  //   p.innerHTML = "No description available";
-  // } else {
-  //   p.innerHTML = marvelData.data.results[i].description;
-  // }
-
-  let divText = document.createElement("div");
-  divText.classList.add("card-text");
-  if (marvelData.data.results[i].description == "") {
-    divText.classList.add("font-italic");
-    divText.classList.add("text-muted");
-    divText.innerHTML = "No description available";
-  } else {
-    divText.innerHTML = marvelData.data.results[i].description;
-  }
-
   let btnCollExp = document.createElement("button");
   btnCollExp.setAttribute("class", "btn btn-primary");
   btnCollExp.setAttribute("type", "button");
@@ -70,13 +50,26 @@ for (let i = 0; i < marvelData.data.results.length; i++) {
   btnCollExp.setAttribute("aria-controls", i);
   btnCollExp.innerHTML = "Read More";
 
-
-
   divCard.appendChild(img);
   divCard.appendChild(cardBody);
   cardBody.appendChild(h5);
-  cardBody.appendChild(collapsDiv);
-  collapsDiv.appendChild(divText);
-  cardBody.appendChild(btnCollExp);
+
+
   divMainStuff.appendChild(divCard);
+
+  let divText = document.createElement("div");
+  divText.classList.add("card-text");
+  if (marvelData.data.results[i].description == "") {
+    divText.classList.add("font-italic");
+    divText.classList.add("text-muted");
+    divText.innerHTML = "No description available";
+    cardBody.appendChild(divText);
+    // collapsDiv.appendChild(divText);
+  } else {
+    divText.innerHTML = marvelData.data.results[i].description;
+    cardBody.appendChild(collapsDiv);
+    collapsDiv.appendChild(divText);
+    cardBody.appendChild(btnCollExp);
+  }
+
 }
