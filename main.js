@@ -74,7 +74,10 @@ function displayCardData(marvelData) {
 
 async function controller() {
   // Run first stuff
-  const marvelData = [await getMarvelData()];
+  const marvelData = await getMarvelData();
+  console.log("Inside the controller >> ", marvelData);
   // Run second stuff
   displayCardData(marvelData);
 }
+
+controller();
