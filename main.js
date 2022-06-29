@@ -55,18 +55,18 @@ function displayCardData(marvelData) {
 
     divMainStuff.appendChild(divCard);
 
-    let divText = document.createElement("div");
-    divText.setAttribute("class", "card card-body");
+    let pCardText = document.createElement("p");
+    pCardText.setAttribute("class", "card-text");
     if (marvelData[i].description == "") {
-      divText.classList.add("font-italic");
-      divText.classList.add("text-muted");
-      divText.innerHTML = "No description available";
-      cardBody.appendChild(divText);
+      pCardText.classList.add("font-italic");
+      pCardText.classList.add("text-muted");
+      pCardText.innerHTML = "No description available";
+      cardBody.appendChild(pCardText);
       // collapsDiv.appendChild(divText);
     } else {
-      divText.innerHTML = marvelData[i].description;
+      pCardText.innerHTML = marvelData[i].description;
       cardBody.appendChild(collapsDiv);
-      collapsDiv.appendChild(divText);
+      collapsDiv.appendChild(pCardText);
       divCard.appendChild(btnCollExp);
     }
   }
