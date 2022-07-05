@@ -2,47 +2,31 @@
 const api_key =
   "dd7f4f144fe3786105bea06c9a02d3ee&hash=8fda5d5a302ba2bbf1db8ceb456f928f";
 
-async function getMarvelData() {
+async function getFakeApi() {
   try {
-    const response = await fetch(
-      `https://gateway.marvel.com/v1/public/characters?ts=1&apikey=${api_key}`
-    );
-    let marvelData = await response.json();
-    return marvelData.data.results;
+    const response = await fetch(`http://fakestoreapi.com/products/`);
+    let fakeApiData = await response.json();
+    return fakeApiData;
   } catch (error) {
     console.log("Error", error);
   }
 }
 
-const test = "d";
+function displayCardData(fakeApiData) {
+  console.log("fakeApiData :>> ", fakeApiData);
+  // Grab main div
+  let divMainStuff = document.getElementById("main-Stuff");
 
-async function getCreatorData() {
-  try {
-    const response = await fetch(
-      `https://gateway.marvel.com/v1/public/creators?ts=1&nameStartsWith=${test}&apikey=${api_key}`
-    );
-    let marvelData = await response.json();
-    return marvelData.data.results;
-  } catch (error) {
-    console.log("Error", error);
-  }
-}
+  // Clear the form
+  divMainStuff.innerHTML = "";
 
-function displayCardData(marvelData) {
-  console.log(marvelData);
-  for (let i = 0; i < marvelData.length; i++) {
-    let divMainStuff = document.getElementById("main-Stuff");
+  // Populate and draw cards
+  for (let i = 0; i < fakeApiData.length; i++) {
     let divCard = document.createElement("div");
     divCard.setAttribute("class", "g-5 col-sm-12 col-md-6 col-lg-4");
 
     let img = document.createElement("img");
-    img.setAttribute(
-      "src",
-      marvelData[i].thumbnail.path +
-        "/portrait_fantastic" +
-        "." +
-        marvelData[i].thumbnail.extension
-    );
+    img.setAttribute("src", fakeApiData[i].image);
     img.setAttribute("alt", "Thumbnail");
     img.classList.add("card-img-top");
     img.classList.add("rounded");
@@ -52,27 +36,30 @@ function displayCardData(marvelData) {
 
     let h5 = document.createElement("h5");
     h5.classList.add("card-title");
-    h5.innerHTML = marvelData[i].name;
+    h5.innerHTML = fakeApiData[i].title;
 
     let divTxtContainer = document.createElement("div");
     divTxtContainer.setAttribute("id", `ident${i}`);
 
+    divMainStuff.appendChild(divCard);
     divCard.appendChild(img);
     divCard.appendChild(cardBody);
     cardBody.appendChild(h5);
-    divMainStuff.appendChild(divCard);
 
     let pCardText = document.createElement("p");
     pCardText.setAttribute("class", "card-text");
-    if (marvelData[i].description == "") {
+
+    // This draws "no description" if the description is empty
+    if (fakeApiData[i].description == "") {
       pCardText.classList.add("font-italic");
       pCardText.classList.add("text-muted");
       pCardText.innerHTML = "No description available";
       cardBody.appendChild(pCardText);
       // collapsDiv.appendChild(divText);
     } else {
-      const readLess = marvelData[i].description.slice(0, 20);
-      const readMore = marvelData[i].description.slice(20);
+      // If the description is poulated the below will give Read more/less functionality
+      const readLess = fakeApiData[i].description.slice(0, 20);
+      const readMore = fakeApiData[i].description.slice(20);
 
       let pReadLess = document.createElement("p");
       pReadLess.innerHTML = readLess;
@@ -123,48 +110,105 @@ function displayCardData(marvelData) {
 
 async function controller() {
   // fetch character data
-  const marvelData = await getMarvelData();
-  // fetch creator data
-  const marvelCreator = await getCreatorData();
+  const fakeApiData = await getFakeApi();
   // Run second stuff
-  displayCardData(marvelData);
+  displayCardData(fakeApiData);
+  // Create category dropdown
+  createCatDropDown(fakeApiData);
+  // Create rating dropdown
+  createRatingDropDown(fakeApiData);
   // Event listener
-  setEventListeners();
-  // Create dropdown\
-  createDropDown(marvelCreator);
+  setEventListeners(fakeApiData);
 }
 
 //listen for the events from the two HTML elements
-const setEventListeners = () => {
+const setEventListeners = (fakeApiData) => {
   document
-    .querySelector("#alphabet-dropdown")
+    .querySelector("#category-dropdown")
     .addEventListener("change", (event) => {
-      console.log("Fist event: ", event);
+      // console.log("Fist event: ", event.target.value);
+      filterByCategory(fakeApiData);
     });
-  document.querySelector("#description").addEventListener("change", (event) => {
-    console.log("second event: ", event);
+  document
+    .querySelector("#rating-dropdown")
+    .addEventListener("change", (event) => {
+      // console.log("second event: ", event.target.value);
+      filterByRating(fakeApiData);
+    });
+  document.querySelector("#search-form").addEventListener("change", (event) => {
+    console.log("Search event :>> ", event.target.value);
+    filterBySearch(fakeApiData);
   });
 };
 
-//Get the value from the even handler
-const filterByDropDown = () => {
-  const dropDownValue = document.querySelector("#alphabet-dropdown").value;
+// Filter by search
+const filterBySearch = (fakeApiData) => {
+  const searchFieldValue = document.querySelector("#search-form").value;
+  console.log("searchFieldValue :>> ", searchFieldValue);
+  const searchFilter = fakeApiData.filter((search) => {
+    return search.title === searchFieldValue;
+  });
+  displayCardData(searchFilter);
+};
+
+// Filter by category
+const filterByCategory = (fakeApiData) => {
+  console.log("fakeApiData :rrrrr>> ", fakeApiData);
+  const dropDownValue = document.querySelector("#category-dropdown").value;
   console.log("selected element:", dropDownValue);
+  const filteredCategory = fakeApiData.filter((category) => {
+    return category.category === dropDownValue;
+  });
+  displayCardData(filteredCategory);
+};
+
+// Filter by rating
+const filterByRating = (fakeApiData) => {
+  console.log("fakeApiData :>> ", fakeApiData);
+  const dropDownValue = document.querySelector("#rating-dropdown").value;
+  console.log("dropDownValue :>> ", dropDownValue);
+  const filteredRating = fakeApiData.filter((rating) => {
+    return rating.rating.rate == dropDownValue;
+  });
+  console.log("filteredRating :>> ", filteredRating);
+  displayCardData(filteredRating);
 };
 
 //populate the data in one of the dropdowns
-const createDropDown = (marvelCreator) => {
-  console.log("marvelCreator :>> ", marvelCreator);
-  marvelCreator.forEach((name) => {
-    const dropdown = document.getElementById("creator-dropdown");
-    let option = document.createElement("option");
-    option.setAttribute("value", name.fullName);
-    option.innerHTML = name.fullName;
-    dropdown.appendChild(option);
+const createCatDropDown = (fakeApiData) => {
+  const dropdown = document.getElementById("category-dropdown");
+  const categorys = [];
+  fakeApiData.forEach(function (category) {
+    let x = category.category;
+    categorys.push(x);
   });
 
-  // console.log(dropdown);
-  // dropdown.appendChild(option);
+  const unique = [...new Set(categorys)];
+
+  unique.forEach((item) => {
+    let option = document.createElement("option");
+    option.setAttribute("value", item);
+    option.innerHTML = item;
+    dropdown.appendChild(option);
+  });
+};
+
+// Populate the data in the other dropdown
+const createRatingDropDown = (fakeApiData) => {
+  const dropdown = document.getElementById("rating-dropdown");
+  const rating = [];
+  fakeApiData.forEach(function (item) {
+    let x = item.rating.rate;
+    rating.push(x);
+  });
+  const unique = [...new Set(rating)];
+
+  unique.forEach((item) => {
+    let option = document.createElement("option");
+    option.setAttribute("value", item);
+    option.innerHTML = item;
+    dropdown.appendChild(option);
+  });
 };
 
 controller();

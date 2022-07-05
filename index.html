@@ -9,13 +9,13 @@
   <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.0-beta1/dist/css/bootstrap.min.css" rel="stylesheet"
     integrity="sha384-0evHe/X+R7YkIZDRvuzKMRqM+OrBnVFBL6DOitfPri4tjfHxaWutUpFmBp4vmVor" crossorigin="anonymous" />
   </style>
-  <title>Marvel db</title>
+  <title>Fake Store API</title>
 </head>
 
 <body>
   <nav class="navbar navbar-expand-lg bg-light">
     <div class="container-fluid">
-      <a class="navbar-brand" href="#">Marvel db</a>
+      <a class="navbar-brand" href="#">Fake Store API</a>
       <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent"
         aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
         <span class="navbar-toggler-icon"></span>
@@ -25,30 +25,10 @@
           <li class="nav-item">
             <a class="nav-link active" aria-current="page" href="#">Home</a>
           </li>
-          <li class="nav-item">
-            <a class="nav-link" href="#">Link</a>
-          </li>
-          <li class="nav-item dropdown">
-            <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-bs-toggle="dropdown"
-              aria-expanded="false">
-              Dropdown
-            </a>
-            <ul class="dropdown-menu" aria-labelledby="navbarDropdown">
-              <li><a class="dropdown-item" href="#">Action</a></li>
-              <li><a class="dropdown-item" href="#">Another action</a></li>
-              <li>
-                <hr class="dropdown-divider">
-              </li>
-              <li><a class="dropdown-item" href="#">Something else here</a></li>
-            </ul>
-          </li>
-          <li class="nav-item">
-            <a class="nav-link disabled">Disabled</a>
-          </li>
         </ul>
         <form class="d-flex" role="search">
-          <input class="form-control me-2" type="search" placeholder="Search" aria-label="Search">
-          <button class="btn btn-outline-success" type="submit">Search</button>
+          <input class="form-control me-2" type="search" id="search-form" placeholder="Search" aria-label="Search">
+          <button class="btn btn-outline-success" id="search-button" type="submit">Search</button>
         </form>
       </div>
     </div>
@@ -57,22 +37,16 @@
     <div class="container">
       <div class="row g-5 align-items-start">
         <div class="col">
-          <label for="alphabet">List creator alphabetically:</label>
-          <select name="alphabet" id="alphabet-dropdown">
-            <option value="all">A</option>
-            <option value="all">B</option>
-            <option value="all">C</option>
-            <option value="all">D</option>
-            <option value="all">E</option>
-            <option value="all">F</option>
-            <option value="all">G</option>
-            <option value="all">H</option>
+          <label for="category">Category:</label>
+          <select name="alphabecat" id="category-dropdown">
+            <option value="all">All</option>
+
           </select>
         </div>
         <div class="col">
-          <label for="creator">Creator Names:</label>
-          <select name="creator" id="creator-dropdown">
-            <!-- <option value="all">A</option> -->
+          <label for="Rating">Sort by rating:</label>
+          <select name="Rating" id="rating-dropdown">
+            <option value="all">All</option>
         </div>
         <div class="col">
           <input type="checkbox" id="description" name="description" value="">
