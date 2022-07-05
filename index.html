@@ -33,30 +33,41 @@
       </div>
     </div>
   </nav>
+
   <div class="container">
     <div class="container">
       <div class="row g-5 align-items-start">
+        <!-- 3 div tags made with bootstrap -->
+        
         <div class="col">
+          <!-- Here is the first dropdown -->
           <label for="category">Category:</label>
-          <select name="alphabecat" id="category-dropdown">
+          <select name="category" id="category-dropdown">
             <option value="all">All</option>
-
+            <!-- More Options are populated here-->
           </select>
         </div>
+
         <div class="col">
+          <!-- here is the second dropdown -->
           <label for="Rating">Sort by rating:</label>
           <select name="Rating" id="rating-dropdown">
             <option value="all">All</option>
+            <!-- More Options are populated here-->
+          </select>
         </div>
+
+        <!-- Here is the checkbox -->
         <div class="col">
           <input type="checkbox" id="description" name="description" value="">
           <label for="description">Has description?</label>
         </div>
+
       </div>
     </div>
 
     <div id="main-Stuff" class="row">
-      <!--Stuff goes in here-->
+      <!--The cards are drawn here-->
     </div>
   </div>
 
