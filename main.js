@@ -1,6 +1,4 @@
 // Second project - WebDev
-const api_key =
-  "dd7f4f144fe3786105bea06c9a02d3ee&hash=8fda5d5a302ba2bbf1db8ceb456f928f";
 
 async function getFakeApi() {
   try {
@@ -8,7 +6,16 @@ async function getFakeApi() {
     let fakeApiData = await response.json();
     return fakeApiData;
   } catch (error) {
-    console.log("Error", error);
+    const mainError = document.getElementById("main-Stuff");
+
+    const divError = document.createElement("div");
+    divError.setAttribute("class", "container");
+
+    const errorMessage = document.createElement("h1");
+    errorMessage.innerHTML = "...thats an error!";
+
+    mainError.appendChild(divError);
+    divError.appendChild(errorMessage);
   }
 }
 
@@ -116,7 +123,6 @@ async function controller() {
   // Create category dropdown
   createCatDropDown(fakeApiData);
   // Create rating dropdown
-  createRatingDropDown(fakeApiData);
   // Event listener
   setEventListeners(fakeApiData);
 }
@@ -130,9 +136,9 @@ const setEventListeners = (fakeApiData) => {
       filterByCategory(fakeApiData);
     });
   document
-    .querySelector("#rating-dropdown")
+    .querySelector("#customRange3")
     .addEventListener("change", (event) => {
-      // console.log("second event: ", event.target.value);
+      console.log("second event: ", event.target.value);
       filterByRating(fakeApiData);
     });
   document.querySelector("#search-form").addEventListener("change", (event) => {
@@ -183,24 +189,6 @@ const createCatDropDown = (fakeApiData) => {
   });
 
   const unique = [...new Set(categorys)];
-
-  unique.forEach((item) => {
-    let option = document.createElement("option");
-    option.setAttribute("value", item);
-    option.innerHTML = item;
-    dropdown.appendChild(option);
-  });
-};
-
-// Populate the data in the ratings dropdown
-const createRatingDropDown = (fakeApiData) => {
-  const dropdown = document.getElementById("rating-dropdown");
-  const rating = [];
-  fakeApiData.forEach(function (item) {
-    let x = item.rating.rate;
-    rating.push(x);
-  });
-  const unique = [...new Set(rating)];
 
   unique.forEach((item) => {
     let option = document.createElement("option");
