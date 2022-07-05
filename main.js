@@ -58,8 +58,8 @@ function displayCardData(fakeApiData) {
       // collapsDiv.appendChild(divText);
     } else {
       // If the description is poulated the below will give Read more/less functionality
-      const readLess = fakeApiData[i].description.slice(0, 20);
-      const readMore = fakeApiData[i].description.slice(20);
+      const readLess = fakeApiData[i].description.slice(0, 30);
+      const readMore = fakeApiData[i].description.slice(30);
 
       let pReadLess = document.createElement("p");
       pReadLess.innerHTML = readLess;
@@ -109,9 +109,9 @@ function displayCardData(fakeApiData) {
 }
 
 async function controller() {
-  // fetch character data
+  // fetch fakestore data
   const fakeApiData = await getFakeApi();
-  // Run second stuff
+  // Display the data to the cards
   displayCardData(fakeApiData);
   // Create category dropdown
   createCatDropDown(fakeApiData);
@@ -144,7 +144,6 @@ const setEventListeners = (fakeApiData) => {
 // Filter by search
 const filterBySearch = (fakeApiData) => {
   const searchFieldValue = document.querySelector("#search-form").value;
-  console.log("searchFieldValue :>> ", searchFieldValue);
   const searchFilter = fakeApiData.filter((search) => {
     return search.title === searchFieldValue;
   });
@@ -153,11 +152,9 @@ const filterBySearch = (fakeApiData) => {
 
 // Filter by category
 const filterByCategory = (fakeApiData) => {
-  console.log("fakeApiData :rrrrr>> ", fakeApiData);
   const dropDownValue = document.querySelector("#category-dropdown").value;
-  console.log("selected element:", dropDownValue);
   const filteredCategory = fakeApiData.filter((category) => {
-    return category.category === dropDownValue;
+    return category.category === dropDownValue || dropDownValue === "all";
   });
   displayCardData(filteredCategory);
 };
@@ -167,14 +164,16 @@ const filterByRating = (fakeApiData) => {
   console.log("fakeApiData :>> ", fakeApiData);
   const dropDownValue = document.querySelector("#rating-dropdown").value;
   console.log("dropDownValue :>> ", dropDownValue);
+  console.log(typeof dropDownValue);
   const filteredRating = fakeApiData.filter((rating) => {
-    return rating.rating.rate == dropDownValue;
+    console.log("rating.rating.rate :>> ", rating.rating.rate);
+    return rating.rating.rate == dropDownValue || dropDownValue === "all";
   });
   console.log("filteredRating :>> ", filteredRating);
   displayCardData(filteredRating);
 };
 
-//populate the data in one of the dropdowns
+//populate the data in the category dropdown
 const createCatDropDown = (fakeApiData) => {
   const dropdown = document.getElementById("category-dropdown");
   const categorys = [];
@@ -193,7 +192,7 @@ const createCatDropDown = (fakeApiData) => {
   });
 };
 
-// Populate the data in the other dropdown
+// Populate the data in the ratings dropdown
 const createRatingDropDown = (fakeApiData) => {
   const dropdown = document.getElementById("rating-dropdown");
   const rating = [];
