@@ -15,7 +15,7 @@
 <body>
   <nav class="navbar navbar-expand-lg bg-light">
     <div class="container-fluid">
-      <a class="navbar-brand" href="#">Fake Store API</a>
+      <a class="navbar-brand" href="index.html">Fake Store API</a>
       <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent"
         aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
         <span class="navbar-toggler-icon"></span>
@@ -23,7 +23,7 @@
       <div class="collapse navbar-collapse" id="navbarSupportedContent">
         <ul class="navbar-nav me-auto mb-2 mb-lg-0">
           <li class="nav-item">
-            <a class="nav-link active" aria-current="page" href="#">Home</a>
+            <!-- <a class="nav-link active" aria-current="page" href="#">Home</a> -->
           </li>
         </ul>
         <form class="d-flex" role="search">
@@ -38,29 +38,23 @@
     <div class="container">
       <div class="row g-5 align-items-start">
         <!-- 3 div tags made with bootstrap -->
-        
+
         <div class="col">
           <!-- Here is the first dropdown -->
-          <label for="category">Category:</label>
-          <select name="category" id="category-dropdown">
-            <option value="all">All</option>
-            <!-- More Options are populated here-->
+
+          <select class="form-select" id="category-dropdown" aria-label="Default select example">
+            <option selected value="all">All categorys</option>
           </select>
+
+          <!-- More Options are populated here-->
+
         </div>
 
         <div class="col">
           <!-- here is the second dropdown -->
-          <label for="Rating">Sort by rating:</label>
-          <select name="Rating" id="rating-dropdown">
-            <option value="all">All</option>
-            <!-- More Options are populated here-->
+          <label for="customRange3" class="form-label">Select rating from 5 ... 1</label>
+          <input type="range" class="form-range" min="0" max="5" step="1" id="customRange3">
           </select>
-        </div>
-
-        <!-- Here is the checkbox -->
-        <div class="col">
-          <input type="checkbox" id="description" name="description" value="">
-          <label for="description">Has description?</label>
         </div>
 
       </div>
