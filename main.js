@@ -122,7 +122,6 @@ async function controller() {
   displayCardData(fakeApiData);
   // Create category dropdown
   createCatDropDown(fakeApiData);
-  // Create rating dropdown
   // Event listener
   setEventListeners(fakeApiData);
 }
@@ -136,7 +135,7 @@ const setEventListeners = (fakeApiData) => {
       filterByCategory(fakeApiData);
     });
   document
-    .querySelector("#customRange3")
+    .querySelector("#slide-selector")
     .addEventListener("change", (event) => {
       console.log("second event: ", event.target.value);
       filterByRating(fakeApiData);
@@ -167,15 +166,17 @@ const filterByCategory = (fakeApiData) => {
 
 // Filter by rating
 const filterByRating = (fakeApiData) => {
-  console.log("fakeApiData :>> ", fakeApiData);
-  const dropDownValue = document.querySelector("#rating-dropdown").value;
-  console.log("dropDownValue :>> ", dropDownValue);
-  console.log(typeof dropDownValue);
+  let dropDownValue = document.querySelector("#slide-selector").value;
+  dropDownValue = Number(dropDownValue);
+  let dropDownValuePlusOne = dropDownValue + 1;
   const filteredRating = fakeApiData.filter((rating) => {
-    console.log("rating.rating.rate :>> ", rating.rating.rate);
-    return rating.rating.rate == dropDownValue || dropDownValue === "all";
+    if (
+      rating.rating.rate < dropDownValuePlusOne &&
+      rating.rating.rate >= dropDownValue
+    ) {
+      return rating;
+    }
   });
-  console.log("filteredRating :>> ", filteredRating);
   displayCardData(filteredRating);
 };
 
