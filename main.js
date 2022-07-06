@@ -132,13 +132,15 @@ const setEventListeners = (fakeApiData) => {
     .querySelector("#category-dropdown")
     .addEventListener("change", (event) => {
       // console.log("Fist event: ", event.target.value);
-      filterByCategory(fakeApiData);
+      // filterByCategory(fakeApiData);
+      filtersCombined(fakeApiData);
     });
   document
     .querySelector("#slide-selector")
     .addEventListener("change", (event) => {
       console.log("second event: ", event.target.value);
-      filterByRating(fakeApiData);
+      // filterByRating(fakeApiData);
+      filtersCombined(fakeApiData);
     });
   document.querySelector("#search-form").addEventListener("change", (event) => {
     console.log("Search event :>> ", event.target.value);
@@ -155,29 +157,29 @@ const filterBySearch = (fakeApiData) => {
   displayCardData(searchFilter);
 };
 
-// Filter by category
-const filterByCategory = (fakeApiData) => {
+// Combined filter section
+const filtersCombined = (fakeApiData) => {
   const dropDownValue = document.querySelector("#category-dropdown").value;
-  const filteredCategory = fakeApiData.filter((category) => {
-    return category.category === dropDownValue || dropDownValue === "all";
-  });
-  displayCardData(filteredCategory);
-};
 
-// Filter by rating
-const filterByRating = (fakeApiData) => {
-  let dropDownValue = document.querySelector("#slide-selector").value;
-  dropDownValue = Number(dropDownValue);
-  let dropDownValuePlusOne = dropDownValue + 1;
-  const filteredRating = fakeApiData.filter((rating) => {
+  let sliderValue = document.querySelector("#slide-selector").value;
+  sliderValue = Number(sliderValue);
+  let sliderValuePlusOne = sliderValue + 1;
+
+  const filteredResults = fakeApiData.filter((filter) => {
+    let ratingResults = 0;
     if (
-      rating.rating.rate < dropDownValuePlusOne &&
-      rating.rating.rate >= dropDownValue
+      filter.rating.rate < sliderValuePlusOne &&
+      filter.rating.rate >= sliderValue
     ) {
-      return rating;
+      ratingResults = filter.rating.rate;
     }
+    return (
+      filter.rating.rate == ratingResults &&
+      (filter.category === dropDownValue || dropDownValue === "all")
+    );
   });
-  displayCardData(filteredRating);
+
+  displayCardData(filteredResults);
 };
 
 //populate the data in the category dropdown
