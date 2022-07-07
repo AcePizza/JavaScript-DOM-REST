@@ -4,7 +4,7 @@ async function getFakeApi() {
   try {
     const response = await fetch(`http://fakestoreapi.com/products/`);
     let fakeApiData = await response.json();
-    console.log("response :>> ", response);
+    // console.log("response :>> ", response);
     if (response.status === 400) {
       console.log("error 400 in response");
     }
@@ -35,15 +35,19 @@ async function getSearchFakeApi(searchFieldValue) {
     const response = await fetch(
       `http://fakestoreapi.com/products/${searchFieldValue}`
     );
-    let fakeApiData = await response.json();
-    return fakeApiData;
+    let searchFakeApiData = await response.json();
+    console.log(
+      "Inside search fetch, searchFakeApiData :>> ",
+      searchFakeApiData
+    );
+    return searchFakeApiData;
   } catch (error) {
     console.log("THAT DOES NOT COMPUTE :>> ", error);
   }
 }
 
 function displayCardData(fakeApiData) {
-  console.log("fakeApiData :>> ", fakeApiData);
+  console.log("fakeApiData inside displayCardData :>> ", fakeApiData);
   // Grab main div
   let divMainStuff = document.getElementById("main-Stuff");
 
@@ -134,6 +138,7 @@ function displayCardData(fakeApiData) {
       pReadLess.appendChild(spnMore);
       divTxtContainer.appendChild(btnReadMoreLess);
 
+      // no need for this. check
       let listenForEvent = document
         .getElementById(`hide-text${i}`)
         .addEventListener("click", showHide);
@@ -157,6 +162,7 @@ function displayCardData(fakeApiData) {
   }
 }
 
+// controller function
 async function controller() {
   // fetch fakestore data
   const fakeApiData = await getFakeApi();
@@ -186,56 +192,30 @@ const setEventListeners = (fakeApiData) => {
     });
   // keyup keyword instead of change
   document.querySelector("#search-form").addEventListener("keyup", (event) => {
-    console.log("Search event :>> ", event.target.value);
+    // improvment potential
     filterBySearch(fakeApiData);
   });
   document.querySelector("#slider-one").addEventListener("change", (event) => {
-    console.log("Slider 1 event :>> ", event.target.value);
     filtersCombined(fakeApiData);
   });
   document.querySelector("#slider-two").addEventListener("change", (event) => {
-    console.log("Slider 2 event :>> ", event.target.value);
     filtersCombined(fakeApiData);
   });
+  document
+    .querySelector("#sort-dropdown")
+    .addEventListener("change", (event) => {
+      console.log("Sort avent listener value :>> ", event.target.value);
+      filtersCombined(fakeApiData);
+    });
 };
 
 // Filter by search
 const filterBySearch = async () => {
   const searchFieldValue = document.querySelector("#search-form").value;
-  const getSearchFakeApiVar = await getSearchFakeApi(searchFieldValue);
-  displayCardData(getSearchFakeApiVar);
+  const fakeApiData = await getSearchFakeApi(searchFieldValue);
+  console.log("Inside filter by search, fakeApiData :>> ", fakeApiData);
+  displayCardData(fakeApiData);
 };
-
-// Filter by price function
-// const filterByPrice = (fakeApiData) => {
-//   let sliderOneValue = document.querySelector("#slider-one").value;
-//   let sliderTwoValue = document.querySelector("#slider-two").value;
-
-//   // covert strings into numbers
-//   numSliderOneValue = Number(sliderOneValue);
-//   numSliderTwoValue = Number(sliderTwoValue);
-
-//   // draws the min price
-//   sliderOneText = document.querySelector("#slider-one-text");
-//   sliderOneText.innerHTML = `From: ${numSliderOneValue} €`;
-
-//   // This makes the value of the second slider never go below the value of the first slider
-//   if (numSliderTwoValue <= numSliderOneValue) {
-//     numSliderTwoValue = numSliderOneValue;
-//     return numSliderTwoValue;
-//   }
-
-//   // draws the max price
-//   sliderTwoText = document.querySelector("#slider-two-text");
-//   sliderTwoText.innerHTML = `To: ${numSliderTwoValue} €`;
-
-//   const priceFilter = fakeApiData.filter((price) => {
-//     console.log(typeof price);
-//     return price.price >= numSliderOneValue && price.price <= numSliderTwoValue;
-//   });
-//   console.log("priceFilter :>> ", priceFilter);
-//   displayCardData(priceFilter);
-// };
 
 // Combined filter section
 const filtersCombined = (fakeApiData) => {
@@ -251,23 +231,26 @@ const filtersCombined = (fakeApiData) => {
   let sliderOneValue = document.querySelector("#slider-one").value;
   let sliderTwoValue = document.querySelector("#slider-two").value;
 
-  // covert strings into numbers
+  // Price range stuff : covert strings into numbers
   numSliderOneValue = Number(sliderOneValue);
   numSliderTwoValue = Number(sliderTwoValue);
 
-  // draws the min price
+  // Price range stuff : draws the min price
   sliderOneText = document.querySelector("#slider-one-text");
   sliderOneText.innerHTML = `From: ${numSliderOneValue} €`;
 
-  // This makes the value of the second slider never go below the value of the first slider
+  // Price range stuff : This makes the value of the second slider never go below the value of the first slider
   if (numSliderTwoValue <= numSliderOneValue) {
     numSliderTwoValue = numSliderOneValue;
     return numSliderTwoValue;
   }
 
-  // draws the max price
+  // Price range stuff : draws the max price
   sliderTwoText = document.querySelector("#slider-two-text");
   sliderTwoText.innerHTML = `To: ${numSliderTwoValue} €`;
+
+  // Sort dropdown
+  let sortDropdown = document.querySelector("#sort-dropdown").value;
 
   // the actual filter
   const filteredResults = fakeApiData.filter((filter) => {
@@ -285,7 +268,9 @@ const filtersCombined = (fakeApiData) => {
       filter.price <= numSliderTwoValue
     );
   });
-
+  if (sortDropdown === "alpha") {
+  }
+  console.log("filteredResults :>> ", filteredResults);
   displayCardData(filteredResults);
 };
 
