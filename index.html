@@ -28,7 +28,7 @@
         </ul>
         <form class="d-flex" role="search">
           <input class="form-control me-2" type="search" id="search-form" placeholder="Search" aria-label="Search">
-          <button class="btn btn-outline-success" id="search-button" type="submit">Search</button>
+          <!-- <button class="btn btn-outline-success" id="search-button" type="submit">Search</button> -->
         </form>
       </div>
     </div>
@@ -49,39 +49,37 @@
         </div>
 
         <div class="col">
-          <div class="form-check">
-            <input class="form-check-input" type="checkbox" value="" id="flexCheckDefault">
-            <label class="form-check-label" for="flexCheckDefault">
-              0 - 50 Euro
-            </label>
-          </div>
-          <div class="form-check">
-            <input class="form-check-input" type="checkbox" value="" id="flexCheckDefault">
-            <label class="form-check-label" for="flexCheckDefault">
-              50 - 100 Euro
-            </label>
-          </div>
-          <div class="form-check">
-            <input class="form-check-input" type="checkbox" value="" id="flexCheckDefault">
-            <label class="form-check-label" for="flexCheckDefault">
-              100 - 500 Euro
-            </label>
-          </div>
-          <div class="form-check">
-            <input class="form-check-input" type="checkbox" value="" id="flexCheckDefault">
-            <label class="form-check-label" for="flexCheckDefault">
-              Above 500 Euro
-            </label>
-          </div>
+          <label for="customRange1" class="form-label">Price range</label>
+          <p id="slider-one-text">From</p>
+          <input type="range" class="form-range" min="0" max="1000" step="10" id="slider-one">
+          <p id="slider-two-text">To</p>
+          <input type="range" class="form-range" min="0" max="1000" step="10" id="slider-two">
         </div>
 
         <div class="col">
           <!-- here is the slider -->
-          <label for="customRange3" class="form-label">Select rating from 5 ... 1</label>
-          <input type="range" class="form-range" min="1" max="5" step="1" id="slide-selector">
+
+          <select class="form-select" id="rating-dropdown" aria-label="Default select example">
+            <option selected value="all">All ratings</option>
+            <option value="5">5 star rating</option>
+            <option value="4">4 star rating</option>
+            <option value="3">3 star rating</option>
+            <option value="2">2 star rating</option>
+            <option value="1">1 star rating</option>
           </select>
         </div>
 
+        <div class="col">
+          <!-- here is the slider -->
+
+          <select class="form-select" id="rating-dropdown" aria-label="Default select example">
+            <option selected value="no-sort">No sorting</option>
+            <option value="alpha">Title Alphabetically</option>
+            <option value="price-highlow">Price high to low</option>
+            <option value="price-lowhigh">Price low to high</option>
+          </select>
+          
+        </div>
       </div>
     </div>
 
