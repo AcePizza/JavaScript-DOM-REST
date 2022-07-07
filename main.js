@@ -4,8 +4,17 @@ async function getFakeApi() {
   try {
     const response = await fetch(`http://fakestoreapi.com/products/`);
     let fakeApiData = await response.json();
+    console.log("response :>> ", response);
+    if (response.status === 400) {
+      console.log("error 400 in response");
+    }
     return fakeApiData;
   } catch (error) {
+    console.log("error.message :>> ", error.message);
+    // This is displayed in the console
+    console.log("THAT DOES NOT COMPUTE :>> ", error);
+
+    // The below does not work. Why??
     const mainError = document.getElementById("main-Stuff");
 
     const divError = document.createElement("div");
@@ -16,6 +25,20 @@ async function getFakeApi() {
 
     mainError.appendChild(divError);
     divError.appendChild(errorMessage);
+  }
+}
+
+// Dynamic search fetch
+async function getSearchFakeApi(searchFieldValue) {
+  console.log("searchFieldValue :>> ", searchFieldValue);
+  try {
+    const response = await fetch(
+      `http://fakestoreapi.com/products/${searchFieldValue}`
+    );
+    let fakeApiData = await response.json();
+    return fakeApiData;
+  } catch (error) {
+    console.log("THAT DOES NOT COMPUTE :>> ", error);
   }
 }
 
@@ -30,13 +53,28 @@ function displayCardData(fakeApiData) {
   // Populate and draw cards
   for (let i = 0; i < fakeApiData.length; i++) {
     let divCard = document.createElement("div");
-    divCard.setAttribute("class", "g-5 col-sm-12 col-md-6 col-lg-4");
+    divCard.setAttribute("class", "card col-sm-12 col-md-6 col-lg-4");
 
     let img = document.createElement("img");
     img.setAttribute("src", fakeApiData[i].image);
     img.setAttribute("alt", "Thumbnail");
     img.classList.add("card-img-top");
     img.classList.add("rounded");
+
+    const ulListGroup = document.createElement("ul");
+    ulListGroup.setAttribute("class", "list-group list-group-flush");
+
+    const liCategory = document.createElement("li");
+    liCategory.setAttribute("class", "list-group-item");
+    liCategory.innerHTML = `Category: ${fakeApiData[i].category}`;
+
+    const liPrice = document.createElement("li");
+    liPrice.setAttribute("class", "list-group-item");
+    liPrice.innerHTML = `Price: ${fakeApiData[i].price} €`;
+
+    const liRating = document.createElement("li");
+    liRating.setAttribute("class", "list-group-item");
+    liRating.innerHTML = `Raing: ${fakeApiData[i].rating.rate}. Based on (${fakeApiData[i].rating.count}) counts`;
 
     let cardBody = document.createElement("div");
     cardBody.classList.add("card-body");
@@ -51,6 +89,10 @@ function displayCardData(fakeApiData) {
     divMainStuff.appendChild(divCard);
     divCard.appendChild(img);
     divCard.appendChild(cardBody);
+    divCard.appendChild(ulListGroup);
+    ulListGroup.appendChild(liCategory);
+    ulListGroup.appendChild(liPrice);
+    ulListGroup.appendChild(liRating);
     cardBody.appendChild(h5);
 
     let pCardText = document.createElement("p");
@@ -136,46 +178,111 @@ const setEventListeners = (fakeApiData) => {
       filtersCombined(fakeApiData);
     });
   document
-    .querySelector("#slide-selector")
+    .querySelector("#rating-dropdown")
     .addEventListener("change", (event) => {
       console.log("second event: ", event.target.value);
       // filterByRating(fakeApiData);
       filtersCombined(fakeApiData);
     });
-  document.querySelector("#search-form").addEventListener("change", (event) => {
+  // keyup keyword instead of change
+  document.querySelector("#search-form").addEventListener("keyup", (event) => {
     console.log("Search event :>> ", event.target.value);
     filterBySearch(fakeApiData);
+  });
+  document.querySelector("#slider-one").addEventListener("change", (event) => {
+    console.log("Slider 1 event :>> ", event.target.value);
+    filtersCombined(fakeApiData);
+  });
+  document.querySelector("#slider-two").addEventListener("change", (event) => {
+    console.log("Slider 2 event :>> ", event.target.value);
+    filtersCombined(fakeApiData);
   });
 };
 
 // Filter by search
-const filterBySearch = (fakeApiData) => {
+const filterBySearch = async () => {
   const searchFieldValue = document.querySelector("#search-form").value;
-  const searchFilter = fakeApiData.filter((search) => {
-    return search.title === searchFieldValue;
-  });
-  displayCardData(searchFilter);
+  const getSearchFakeApiVar = await getSearchFakeApi(searchFieldValue);
+  displayCardData(getSearchFakeApiVar);
 };
+
+// Filter by price function
+// const filterByPrice = (fakeApiData) => {
+//   let sliderOneValue = document.querySelector("#slider-one").value;
+//   let sliderTwoValue = document.querySelector("#slider-two").value;
+
+//   // covert strings into numbers
+//   numSliderOneValue = Number(sliderOneValue);
+//   numSliderTwoValue = Number(sliderTwoValue);
+
+//   // draws the min price
+//   sliderOneText = document.querySelector("#slider-one-text");
+//   sliderOneText.innerHTML = `From: ${numSliderOneValue} €`;
+
+//   // This makes the value of the second slider never go below the value of the first slider
+//   if (numSliderTwoValue <= numSliderOneValue) {
+//     numSliderTwoValue = numSliderOneValue;
+//     return numSliderTwoValue;
+//   }
+
+//   // draws the max price
+//   sliderTwoText = document.querySelector("#slider-two-text");
+//   sliderTwoText.innerHTML = `To: ${numSliderTwoValue} €`;
+
+//   const priceFilter = fakeApiData.filter((price) => {
+//     console.log(typeof price);
+//     return price.price >= numSliderOneValue && price.price <= numSliderTwoValue;
+//   });
+//   console.log("priceFilter :>> ", priceFilter);
+//   displayCardData(priceFilter);
+// };
 
 // Combined filter section
 const filtersCombined = (fakeApiData) => {
+  // Category stuff
   const dropDownValue = document.querySelector("#category-dropdown").value;
 
-  let sliderValue = document.querySelector("#slide-selector").value;
-  sliderValue = Number(sliderValue);
-  let sliderValuePlusOne = sliderValue + 1;
+  // Ratings stuff
+  let ratingDropdown = document.querySelector("#rating-dropdown").value;
+  ratingDropdownOne = Number(ratingDropdown);
+  let ratingDropdownPlusOne = ratingDropdownOne + 1;
 
+  // Price range stuff
+  let sliderOneValue = document.querySelector("#slider-one").value;
+  let sliderTwoValue = document.querySelector("#slider-two").value;
+
+  // covert strings into numbers
+  numSliderOneValue = Number(sliderOneValue);
+  numSliderTwoValue = Number(sliderTwoValue);
+
+  // draws the min price
+  sliderOneText = document.querySelector("#slider-one-text");
+  sliderOneText.innerHTML = `From: ${numSliderOneValue} €`;
+
+  // This makes the value of the second slider never go below the value of the first slider
+  if (numSliderTwoValue <= numSliderOneValue) {
+    numSliderTwoValue = numSliderOneValue;
+    return numSliderTwoValue;
+  }
+
+  // draws the max price
+  sliderTwoText = document.querySelector("#slider-two-text");
+  sliderTwoText.innerHTML = `To: ${numSliderTwoValue} €`;
+
+  // the actual filter
   const filteredResults = fakeApiData.filter((filter) => {
     let ratingResults = 0;
     if (
-      filter.rating.rate < sliderValuePlusOne &&
-      filter.rating.rate >= sliderValue
+      filter.rating.rate < ratingDropdownPlusOne &&
+      filter.rating.rate >= ratingDropdownOne
     ) {
       ratingResults = filter.rating.rate;
     }
     return (
-      filter.rating.rate == ratingResults &&
-      (filter.category === dropDownValue || dropDownValue === "all")
+      (filter.category === dropDownValue || dropDownValue === "all") &&
+      (filter.rating.rate === ratingResults || ratingDropdown === "all") &&
+      filter.price >= numSliderOneValue &&
+      filter.price <= numSliderTwoValue
     );
   });
 
